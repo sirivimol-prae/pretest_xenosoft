@@ -19,7 +19,6 @@ export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteC
     onVote(quote.id);
   };
 
-  // ใช้สีจาก mockData หรือใช้สีเริ่มต้นถ้าไม่มี
   const categoryGradient = categoryColors[quote.category] || "from-gray-400 to-gray-600";
 
   return (
@@ -78,7 +77,6 @@ export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteC
         </button>
       </div>
       
-      {/* Decorative gradient border */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-200 via-blue-200 to-green-200 opacity-0 hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
     </div>
   );
