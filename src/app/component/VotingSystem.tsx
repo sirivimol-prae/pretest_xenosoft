@@ -164,7 +164,6 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
                 <span className="thai-text">กราฟแสดงคะแนนโหวต Top 5 🏆</span>
               </h3>
               
-              {/* Desktop Chart */}
               <div className="hidden lg:block relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 shadow-2xl h-[700px]">
                 <div className="absolute inset-0 overflow-hidden">
                   {Array.from({ length: 25 }).map((_, i) => (
@@ -289,14 +288,14 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
                 <div className="absolute top-1/3 right-4 text-pink-400 text-lg animate-bounce" style={{ animationDelay: '2s' }}>🌟</div>
               </div>
 
-              {/* Mobile & Tablet Chart */}
+
+
               <div className="lg:hidden">
                 <div className="space-y-4">
                   {quotes
                     .sort((a, b) => b.votes - a.votes)
                     .slice(0, 5)
                     .map((quote, index) => {
-                      const maxVotes = Math.max(...quotes.map(q => q.votes));
                       const colors = [
                         'from-yellow-400 to-yellow-600',
                         'from-gray-300 to-gray-500', 
