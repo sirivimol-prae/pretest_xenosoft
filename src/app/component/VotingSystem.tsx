@@ -160,11 +160,12 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
 
           {showChart && (
             <div className="border-t-2 border-purple-200 pt-6">
-              <h3 className="text-2xl font-fredoka gradient-text mb-8 text-center">
+              <h3 className="text-xl sm:text-2xl font-fredoka gradient-text mb-6 sm:mb-8 text-center">
                 <span className="thai-text">กราฟแสดงคะแนนโหวต Top 5 🏆</span>
               </h3>
               
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 shadow-2xl h-[700px]">
+              {/* Desktop Chart */}
+              <div className="hidden lg:block relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 shadow-2xl h-[700px]">
                 <div className="absolute inset-0 overflow-hidden">
                   {Array.from({ length: 25 }).map((_, i) => (
                     <div
@@ -286,6 +287,68 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
                 
                 <div className="absolute top-1/2 left-4 text-purple-400 text-lg animate-bounce" style={{ animationDelay: '1s' }}>⭐</div>
                 <div className="absolute top-1/3 right-4 text-pink-400 text-lg animate-bounce" style={{ animationDelay: '2s' }}>🌟</div>
+              </div>
+
+              {/* Mobile & Tablet Chart */}
+              <div className="lg:hidden">
+                <div className="space-y-4">
+                  {quotes
+                    .sort((a, b) => b.votes - a.votes)
+                    .slice(0, 5)
+                    .map((quote, index) => {
+                      const maxVotes = Math.max(...quotes.map(q => q.votes));
+                      const colors = [
+                        'from-yellow-400 to-yellow-600',
+                        'from-gray-300 to-gray-500', 
+                        'from-orange-400 to-orange-600',
+                        'from-blue-400 to-blue-600',
+                        'from-purple-400 to-purple-600'
+                      ];
+                      const bgColors = [
+                        'bg-yellow-50 border-yellow-200',
+                        'bg-gray-50 border-gray-200',
+                        'bg-orange-50 border-orange-200',
+                        'bg-blue-50 border-blue-200',
+                        'bg-purple-50 border-purple-200'
+                      ];
+
+                      return (
+                        <div key={quote.id} className={`${bgColors[index]} border-2 rounded-xl p-4 shadow-lg`}>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-8 h-8 bg-gradient-to-r ${colors[index]} rounded-full flex items-center justify-center`}>
+                                <span className="text-white font-bold text-sm">
+                                  {index + 1}
+                                </span>
+                                {index === 0 && <span className="ml-1">👑</span>}
+                              </div>
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-gray-800 font-bold text-lg">
+                                    {quote.votes} โหวต
+                                  </span>
+                                  <span className="text-red-500">❤️</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div className="text-gray-700 text-sm font-medium mb-2 leading-relaxed">
+                            &ldquo;{quote.text}&rdquo;
+                          </div>
+                          
+                          <div className="flex justify-between items-center">
+                            <div className="text-gray-600 text-xs">
+                              - {quote.author}
+                            </div>
+                            <span className="inline-block text-xs px-2 py-1 bg-white/70 rounded-full text-gray-600 border">
+                              {quote.category}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
           )}
