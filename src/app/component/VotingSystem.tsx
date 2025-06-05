@@ -59,6 +59,25 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-green-100">
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-10px) rotate(180deg); }
+        }
+        
+        @keyframes slideUp {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-slide-up {
+          animation: slideUp 1s ease-out forwards;
+        }
+      `}</style>
       <header className="bg-white/80 backdrop-blur-sm shadow-lg border-b border-purple-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col space-y-3 py-4 sm:hidden">
@@ -141,34 +160,132 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
 
           {showChart && (
             <div className="border-t-2 border-purple-200 pt-6">
-              <h3 className="text-xl font-fredoka gradient-text mb-4">
-                <span className="thai-text">กราฟแสดงคะแนนโหวต (Top 5)</span>
+              <h3 className="text-2xl font-fredoka gradient-text mb-8 text-center">
+                <span className="thai-text">กราฟแสดงคะแนนโหวต Top 5 🏆</span>
               </h3>
-              <div className="space-y-4">
-                {quotes
-                  .sort((a, b) => b.votes - a.votes)
-                  .slice(0, 5)
-                  .map((quote, index) => (
-                    <div key={quote.id} className="flex items-center space-x-4">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-400 to-blue-400 flex items-center justify-center text-white font-bold text-sm">
-                        {index + 1}
-                      </div>
-                      <div className="w-48 text-sm text-gray-700 truncate font-medium">
-                        {quote.text.substring(0, 35)}...
-                      </div>
-                      <div className="flex-1 bg-gradient-to-r from-purple-100 to-blue-100 rounded-full h-8 relative shadow-inner">
-                        <div
-                          className="bg-gradient-to-r from-purple-500 to-blue-500 h-8 rounded-full flex items-center justify-end pr-3 text-white text-sm font-bold transition-all duration-700 shadow-lg"
-                          style={{ 
-                            width: `${Math.max((quote.votes / Math.max(...quotes.map(q => q.votes))) * 100, 20)}%` 
-                          }}
-                        >
-                          {quote.votes}
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                }
+              
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 shadow-2xl h-[700px]">
+                <div className="absolute inset-0 overflow-hidden">
+                  {Array.from({ length: 25 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-2 h-2 bg-white rounded-full opacity-20 animate-pulse"
+                      style={{
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        animationDelay: `${Math.random() * 3}s`,
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex justify-center items-end h-96 space-x-6 mb-8">
+                    {quotes
+                      .sort((a, b) => b.votes - a.votes)
+                      .slice(0, 5)
+                      .map((quote, index) => {
+                        const maxVotes = Math.max(...quotes.map(q => q.votes));
+                        const percentage = Math.max((quote.votes / maxVotes) * 100, 25);
+                        const colors = [
+                          'from-yellow-400 via-yellow-500 to-yellow-600', 
+                          'from-gray-300 via-gray-400 to-gray-500',        
+                          'from-orange-400 via-orange-500 to-orange-600', 
+                          'from-blue-400 via-blue-500 to-blue-600',       
+                          'from-purple-400 via-purple-500 to-purple-600'  
+                        ];
+                        const shadowColors = [
+                          'shadow-yellow-500/60',
+                          'shadow-gray-500/60', 
+                          'shadow-orange-500/60',
+                          'shadow-blue-500/60',
+                          'shadow-purple-500/60'
+                        ];
+
+                        return (
+                          <div key={quote.id} className="relative flex flex-col items-center w-32">
+                            {index === 0 && (
+                              <div className="absolute -top-12 text-3xl animate-bounce z-20">👑</div>
+                            )}
+                            
+                            <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-20">
+                              <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-xl border border-white/50">
+                                <span className="text-gray-800 font-bold text-base">
+                                  {quote.votes} ❤️
+                                </span>
+                              </div>
+                            </div>
+                            
+                            <div 
+                              className={`relative w-full bg-gradient-to-t ${colors[index]} rounded-t-xl ${shadowColors[index]} shadow-2xl transition-all duration-1000 hover:scale-105 cursor-pointer group flex items-center justify-center border-2 border-white/20`}
+                              style={{ 
+                                height: `${percentage * 0.9}%`,
+                                minHeight: '100px'
+                              }}
+                            >
+                              <div className="absolute inset-0 bg-gradient-to-t from-transparent via-white/30 to-white/50 rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                              
+                              <span className="text-white font-bold text-2xl drop-shadow-lg z-10">
+                                {index + 1}
+                              </span>
+                              
+                              <div className={`absolute inset-0 bg-gradient-to-t ${colors[index]} rounded-t-xl opacity-40 blur-lg -z-10`}></div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                    {quotes
+                      .sort((a, b) => b.votes - a.votes)
+                      .slice(0, 5)
+                      .map((quote, index) => {
+                        const colors = [
+                          'from-yellow-400 to-yellow-600',
+                          'from-gray-300 to-gray-500', 
+                          'from-orange-400 to-orange-600',
+                          'from-blue-400 to-blue-600',
+                          'from-purple-400 to-purple-600'
+                        ];
+
+                        return (
+                          <div key={quote.id} className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                            <div className="flex items-center space-x-2 mb-3">
+                              <div className={`w-6 h-6 bg-gradient-to-r ${colors[index]} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
+                                {index + 1}
+                              </div>
+                              <span className="text-white font-bold text-lg">
+                                {quote.votes} โหวต
+                              </span>
+                            </div>
+                            
+                            <div className="text-white text-sm font-medium mb-2 leading-relaxed">
+                              "{quote.text}"
+                            </div>
+                            
+                            <div className="text-gray-300 text-xs">
+                              - {quote.author}
+                            </div>
+                            
+                            <div className="mt-2">
+                              <span className="inline-block text-xs px-2 py-1 bg-white/20 rounded-full text-white">
+                                {quote.category}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
+                
+                <div className="absolute top-6 left-6 text-yellow-400 text-2xl animate-pulse">✨</div>
+                <div className="absolute top-6 right-6 text-yellow-400 text-2xl animate-pulse">✨</div>
+                <div className="absolute bottom-6 left-6 text-blue-400 text-2xl animate-pulse">💫</div>
+                <div className="absolute bottom-6 right-6 text-blue-400 text-2xl animate-pulse">💫</div>
+                
+                <div className="absolute top-1/2 left-4 text-purple-400 text-lg animate-bounce" style={{ animationDelay: '1s' }}>⭐</div>
+                <div className="absolute top-1/3 right-4 text-pink-400 text-lg animate-bounce" style={{ animationDelay: '2s' }}>🌟</div>
               </div>
             </div>
           )}
