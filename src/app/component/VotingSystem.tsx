@@ -261,7 +261,7 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
                             </div>
                             
                             <div className="text-white text-sm font-medium mb-2 leading-relaxed">
-                              "{quote.text}"
+                              &ldquo;{quote.text}&rdquo;
                             </div>
                             
                             <div className="text-gray-300 text-xs">
