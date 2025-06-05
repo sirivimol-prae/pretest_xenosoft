@@ -1,15 +1,8 @@
 'use client';
-
 import React from 'react';
 import { Heart } from 'lucide-react';
-import { Quote, categoryColors } from './mockData';
-
-interface QuoteCardProps {
-  quote: Quote;
-  onVote: (quoteId: number) => void;
-  isVoted: boolean;
-  isLoggedIn: boolean;
-}
+import { QuoteCardProps } from '../types';
+import { categoryColors } from './mockData';
 
 export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteCardProps) {
   const handleVote = () => {
@@ -26,6 +19,7 @@ export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteC
     onVote(quote.id);
   };
 
+  // ใช้สีจาก mockData หรือใช้สีเริ่มต้นถ้าไม่มี
   const categoryGradient = categoryColors[quote.category] || "from-gray-400 to-gray-600";
 
   return (
@@ -36,9 +30,9 @@ export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteC
         </span>
         
         <blockquote className="text-gray-800 text-lg leading-relaxed mb-4 font-prompt font-medium relative thai-text">
-          <span className="text-purple-400 text-2xl absolute -left-2 -top-1 font-fredoka">"</span>
+          <span className="text-purple-400 text-2xl absolute -left-2 -top-1 font-fredoka">&quot;</span>
           <span className="pl-4">{quote.text}</span>
-          <span className="text-purple-400 text-2xl font-fredoka">"</span>
+          <span className="text-purple-400 text-2xl font-fredoka">&quot;</span>
         </blockquote>
         
         <cite className="text-gray-600 text-sm font-fredoka font-medium">
@@ -84,6 +78,7 @@ export default function QuoteCard({ quote, onVote, isVoted, isLoggedIn }: QuoteC
         </button>
       </div>
       
+      {/* Decorative gradient border */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-200 via-blue-200 to-green-200 opacity-0 hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
     </div>
   );

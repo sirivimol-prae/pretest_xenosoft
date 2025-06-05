@@ -3,18 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, BarChart3 } from 'lucide-react';
 import QuoteCard from './QuoteCard';
-import { Quote, mockQuotes, categories } from './mockData';
-
-interface VotingSystemProps {
-  currentUser: string;
-  onLogout: () => void;
-}
+import { Quote, VotingSystemProps, SortBy } from '../types';
+import { mockQuotes, categories } from './mockData';
 
 export default function VotingSystem({ currentUser, onLogout }: VotingSystemProps) {
   const [quotes, setQuotes] = useState<Quote[]>(mockQuotes);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด');
-  const [sortBy, setSortBy] = useState<'votes' | 'author' | 'text'>('votes');
+  const [sortBy, setSortBy] = useState<SortBy>('votes');
   const [currentPage, setCurrentPage] = useState(1);
   const [showChart, setShowChart] = useState(false);
   const [votedQuotes, setVotedQuotes] = useState<Set<number>>(new Set());
@@ -126,7 +122,7 @@ export default function VotingSystem({ currentUser, onLogout }: VotingSystemProp
 
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'votes' | 'author' | 'text')}
+              onChange={(e) => setSortBy(e.target.value as SortBy)}
               className="px-4 py-3 border-2 border-green-200 rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-400 bg-white/80 text-green-800 transition-all font-prompt thai-text"
             >
               <option value="votes">เรียงตามโหวต</option>
